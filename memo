@@ -1,0 +1,4 @@
+・マシン作成
+db_machine("insert",{name:"test2", type:1, comment:"aaa"});
+
+・

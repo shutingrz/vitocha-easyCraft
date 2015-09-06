@@ -1,0 +1,192 @@
+p { margin:0px; padding:0px }
+
+br {
+	line-height: 1.5em;
+	height: 1.5em;
+}
+
+input { 
+     height: 1.5em; 
+     line-height: 1.5em; 
+}
+
+div.top{
+	width : 100%;
+}
+
+div.top div.header{
+	width : 100%;
+	height: 7%;
+	background-color: #08192D;
+}
+
+div.top div.header div.left{
+	float : left;
+	text-align : left;
+}
+
+div.top div.header div.right{
+	float : right;
+	text-align : right;
+	color: white;
+}
+
+.header .left .sub{
+	color: gray;
+	font-size: 1em;
+	padding-left: 1em;
+	padding-top: 35%;
+	padding-bottom: 30%;
+}
+
+.header .right div{
+	color: white;
+	font-size: 1.2em;
+	padding-top: 30%;
+	padding-bottom: 30%;
+}
+
+#mainArea{
+	height: 91.5%;
+	background-color: #434343;
+}
+
+#mainArea .tab-content{
+	height: 96%;
+	background-color: #ececec;
+	overflow-x: scroll;
+	overflow-y: scroll;
+}
+
+#machineTable tbody tr{
+	background-color: white;
+}
+
+
+#nowLoadingLog{
+	overflow-y : scroll;
+	overflow-x : hidden;
+	width : 95%;
+	height : 180px;
+	margin-left : auto;
+	margin-right : auto;
+}
+
+
+.make-switch {
+	height : 30px;
+}
+/*
+#machineProperty{
+	float : right;
+	overflow : scroll;
+	width : 49%;
+	height : 80%;
+	border : 1px solid;
+	padding : 1%;
+}
+*/
+#machineProperty .package{
+	width : 100%;
+}
+
+#newMachineForm .package select:disabled{
+	color : black;
+}
+
+span.br{
+	display:block;
+}
+
+img.nowloadingIcon{
+	width: 150px;
+	height: 150px;
+	display: block;
+ 	margin-left: auto;
+ 	margin-right: auto;
+ 	margin-bottom: 3%;
+}
+img.minimumNowloadingIcon{
+	width : 20px;
+	height : 20px;
+}
+
+#pkgSearchResult, .pkgList ,#newMachineForm .package{
+	width : 95%;
+	overflow : scroll;
+
+}
+
+#diagram{
+	float: left;
+	width : 950px;
+	height : 94%;
+}
+
+#connectServerModal .modal-dialog {
+    width: 30%;
+    padding: 1%;
+}
+
+#connectServerModal .modal-dialog .modal-content .modal-body {
+	height: 5em;
+}
+
+#shellModal .modal-dialog .modal-content .modal-body{
+	height : 340px;
+}
+
+#contextMenu {
+  position: absolute;
+  display:none;
+}
+
+#l3Modal .modal-dialog .modal-content .modal-body{
+	height : 340px;
+}
+
+
+
+.l3inputName, .connectServerName {
+	float: left;
+}
+
+.l3inputData, .connectServerData {
+	float: right;
+}
+
+#machineInfoModal .modal-dialog .modal-content .modal-body{
+	height: 50%;
+}
+
+#machineInfoModal .modal-dialog{
+	width: 50%;
+}
+
+#term{
+	height: 98%;
+	overflow-y: scroll;
+}
+
+.nav-tabs-left{
+	height: 96%;
+	overflow-y: scroll;
+}
+
+/* bootstrap上書き*/
+.tabs-left > .nav-tabs{
+	margin-right: 0px;
+}
+
+.tab-content2{
+	padding-left: 10px;
+	height: 99%;
+	overflow-y: scroll;
+}
+
+.align-right{text-align: right;}
+.align-center{text-align: center;}
+
+.l3inputName{
+	line-height: 1.5em;
+}
