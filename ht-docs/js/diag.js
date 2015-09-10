@@ -142,6 +142,8 @@ function diag_epairNumber(){
 
 function diag_deleteLink(epair){
 //	send(NETWORK,{mode: "link",  control: "delete", msg : link});
+	db_l3("delete", epair+"a");
+	db_l3("delete", epair+"b");
 	db_link("delete", epair);
 	update();
 
