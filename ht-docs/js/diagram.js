@@ -81,6 +81,7 @@ function tick() {
 														return "translate(" + MRTWIDTH + "," + MRTHEIGHT + ")";
 													}else{
 														return "translate(" + d.x + "," + d.y + ")";
+											//			return "translate(" + node.centroid(d, i) + ")"
 													}
 												});
 }
@@ -228,6 +229,7 @@ function update() {
 		return REPULSE;
 	})
 	.on("tick", tick);
+
 
 	link = svg.selectAll(".link")
 	.data(d3linkDB, function(l) { return l.source + '-' + l.target; }) //linksデータを要素にバインド

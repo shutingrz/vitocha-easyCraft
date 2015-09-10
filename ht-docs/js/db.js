@@ -83,18 +83,46 @@ function db_link(control,msg){
   else if (control == "select"){
     if (msg == "all"){
       return linkDB;
-    }
-    else{
+  }else{
       return linkDB[db_selectDB("link",msg)];
     }
-  }
-  else if (control == "insert"){
+  }else if(control == "linkwithjail"){
+      var idx =  db_selectDB(control, msg);
+
+      if(idx == null){
+          return null;
+      }else{
+          return linkDB[idx].epair;
+      }
+  }else if (control == "insert"){
     linkDB.push( {source: msg.source, target: msg.target, epair: msg.epair});
   }
 }
 
+function db_l3(control, msg){
+    if (control == "delete"){
+      if (msg == "all"){
+        l3DB = [];
+      }
+      else{
+        l3DB.splice(db_selectDB("l3",msg),1);
+      }
+    }
+    else if (control == "select"){
+      if (msg == "all"){
+        return l3DB;
+      }else{
+        return l3DB[db_selectDB("l3",msg)];
+      }
+    }else if (control == "insert"){
+    //    var epairF = msg.epair.replace("epair","");
+//      l3DB.push( {source: msg.source, target: msg.target, epair: msg.epair});
+        l3DB.push( {epair:msg.epair, type:msg.type, name: msg.name, ipaddr: msg.ipaddr, ipmask: msg.ipmask, ip6addr: msg.ip6addr, ip6mask: msg.ip6mask})
+    }
+}
+
 function db_selectDB(control,name){
-  idx = 0;
+  idx = null;
 
   if(control == "machine"){
     machineDB.forEach(function(values,index){
@@ -120,8 +148,12 @@ function db_selectDB(control,name){
             idx = index;
         }
     });
+}  else if(control == "linkwithjail"){
+    linkDB.forEach(function(values, index){
+        if(name == values.source || name == values.target){
+            idx = index;
+        }
+    });
 }
-
-
   return idx;
 }

@@ -9,6 +9,7 @@
 		<script src="./js/lib/bootstrap-switch.js"></script>
 		<script src="./js/lib/webshell.js"></script>
 		<script src="./js/lib/d3.js"></script>
+<!--		<script src="./js/lib/d3.v3.min.js"></script>	-->
 		<script src="./js/lib/jasny-bootstrap.js"></script>
 		<script src="./js/app.js"></script>
 		<script src="./js/jail.js"></script>
@@ -68,6 +69,9 @@
 							<input id="ciscoSwitch" class="ciscoSwitch" type="checkbox">
 						</label>
 					</div>
+					<hr>
+					バグったらこれ
+					<li ><a href="javascript:update()">画面更新</a></li>
 
 				</ul>
 
@@ -193,7 +197,6 @@
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="active"><a href="#machineInfo_machineData" role="tab" data-toggle="tab">マシン情報</a></li>
 					<li class=""><a href="#machineInfo_network" role="tab" data-toggle="tab">ネットワーク</a></li>
-					<li><a href="#machineInfo_shell" role="tab" data-toggle="tab">コンソール</a></li>
 				</ul>
 
 				<!-- Tab panes -->
@@ -202,7 +205,6 @@
 						<!-- Nav tabs -->
 						<ul class="nav nav-tabs nav-tabs-left" role="tablist">
 							<li class="active"><a href="#machineData_property" role="tab" data-toggle="tab">基本情報</a></li>
-							<li><a href="#machineData_console" role="tab" data-toggle="tab">端末設定</a></li>
 						</ul>
 						<!-- Tab panes -->
 						<div class="tab-content tab-content2">
@@ -215,22 +217,12 @@
 									<h4>MachineType</h4>
 									<span class="machineType align-right br"></span>
 								</div>
-								<div class="template">
-									<h4>Template</h4>
-									<span class="template align-right br"></span>
-								</div>
 								<div class="comment">
 									<h4>Comment</h4>
 									<span class="comment align-right br"></span>
 								</div>
 							</div>
-							<div class="tab-pane" id="machineData_console">
-								<div class="clear">
-									<h4>コンソールの初期化</h4>
-									コンソールでexitなどをし、コンソールが終了してしまった場合に使用してください。<br>
-									<button type="button" class="btn btn-default" id="consoleUnregisterBtn">初期化</button>
-								</div>
-							</div>
+							
 						</div>
 					</div>
 

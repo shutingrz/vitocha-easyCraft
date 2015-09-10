@@ -126,8 +126,12 @@ function diag_selectTargetNode(epair){
 
 function diag_sendLink(source,target){
 //	send(NETWORK,{mode: "link", control: "add", msg: {source: source, target: target}});
-	var epairName = "epair" + diag_epairNumber() ;
+	var epairPre = "epair";
+	var epairNumber = diag_epairNumber();
+	var epairName = epairPre + epairNumber ;
 	db_link("insert", {source: source, target: target, epair: epairName});
+	db_l3("insert", {epair:epairName+"a", type:"a", name: source, ipaddr: "", ipmask: "", ip6addr: "", ip6mask: ""});
+	db_l3("insert", {epair:epairName+"b", type:"b", name: target, ipaddr: "", ipmask: "", ip6addr: "", ip6mask: ""});
 	update();
 }
 
@@ -140,6 +144,7 @@ function diag_deleteLink(epair){
 //	send(NETWORK,{mode: "link",  control: "delete", msg : link});
 	db_link("delete", epair);
 	update();
+
 }
 
 function diag_getNetworkLog(networkLog){
@@ -154,6 +159,8 @@ function diag_createL3(epair,ipaddr,ipmask,ip6addr,ip6mask,as){
 	//data = {"epair" : $("#createL3 .epair").val(), "ipaddr" : $("#createL3 .ipaddr").val(), "ipmask" : $("#createL3 .ipmask").val(), "ip6addr" : $("#createL3 .ip6addr").val(), "ip6mask" : $("#createL3 .ip6mask").val(), "as" : $("#createL3 .as").val()};
 	data = {"epair" : epair, "ipaddr" : ipaddr, "ipmask" : ipmask, "ip6addr" : ip6addr, "ip6mask" : ip6mask, "as" : as};
 	send(NETWORK, {mode: "l3", control: "create", msg : data});
+	//db_l3("insert", {epair:epairName+"a", type:"a", name: source, ipaddr: "", ipmask: "", ip6addr: "", ip6mask: ""});
+
 }
 
 function diag_showNodeContextMenu(d){
@@ -199,8 +206,15 @@ function diag_showLinkContextMenu(d){
 	return false;
 }
 
-function diag_setL3(){
-	console.log("diag_setL3");
+function diag_setL3(data){
+	//console.log("diag_setL3");
+	var idx = db_selectDB("l3", data.epair);
+	l3DB[idx].ipaddr = data.ipaddr;
+	l3DB[idx].ipmask = data.ipmask;
+	l3DB[idx].ip6addr = data.ip6addr;
+	l3DB[idx].ip6mask = data.ip6mask;
+	l3DB[idx].as = data.as;
+
 }
 
 function diag_nowloading(){
@@ -302,7 +316,7 @@ var l3str = '\
 				<input class="as_b" type="hidden" value="" >\
 				<br>\
 				<br>\
-				<button type="button" class="btn btn-default" id="machineInfo_submit" disabled>適用</button>\
+				<button class="btn btn-default" id="machineInfo_submit" disabled>適用</button>\
 			</form>\
 		</div>\
 		';
@@ -336,6 +350,10 @@ function tabs_addPane(content,str){
 
 function diag_showNetwork(epair){
 	var index = db_selectDB("l3",epair);
+	if(index == null){
+		console.log("no l3DB index!");
+		return;
+	}
 	var db = l3DB[index];
 	console.log(db);
 	var target = diag_selectTargetNode(epair);
@@ -375,19 +393,22 @@ function diag_showNetwork(epair){
 	}
 
 	$("#machineInfo_submit").attr('onclick', 'javascript:$("#l3inputData").trigger("submit")');
+//	$("#machineInfo_submit").attr('onclick', 'javascript:alert()');
 	$("#machineInfo_submit").removeAttr("disabled");
 }
 
 function diag_l3DataConstract(){
 	console.log("l3DataConstract");
 //	$("#l3inputData").trigger('submit');
-	ipaddr = $("#l3inputData .ipaddr1").val() + "." + $("#l3inputData .ipaddr2").val() + "." + $("#l3inputData .ipaddr3").val() + "." + $("#l3inputData .ipaddr4").val();
-	ipmask = $("#l3inputData .ipmask1").val() + "." + $("#l3inputData .ipmask2").val() + "." + $("#l3inputData .ipmask3").val() + "." + $("#l3inputData .ipmask4").val();
-	ip6addr = $("#l3inputData .ip6addr").val();
-	ip6mask = $("#l3inputData .ip6mask").val();
-	as = $("#l3inputData .as").val();
-	epair = $("#l3inputData .epair").val();
-	diag_createL3(epair,ipaddr,ipmask,ip6addr,ip6mask,as);
+	var ipaddr = $("#l3inputData .ipaddr1").val() + "." + $("#l3inputData .ipaddr2").val() + "." + $("#l3inputData .ipaddr3").val() + "." + $("#l3inputData .ipaddr4").val();
+	var ipmask = $("#l3inputData .ipmask1").val() + "." + $("#l3inputData .ipmask2").val() + "." + $("#l3inputData .ipmask3").val() + "." + $("#l3inputData .ipmask4").val();
+	var ip6addr = $("#l3inputData .ip6addr").val();
+	var ip6mask = $("#l3inputData .ip6mask").val();
+	var as = $("#l3inputData .as").val();
+	var epair = $("#l3inputData .epair").val();
+	var data = {epair : epair, ipaddr : ipaddr, ipmask : ipmask, ip6addr : ip6addr, ip6mask : ip6mask, as : as};
+
+	diag_setL3(data);
 }
 
 

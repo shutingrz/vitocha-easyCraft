@@ -144,15 +144,32 @@ function jail_createJail(){
                             comment : $("#newMachineForm [name=comment]").val()
                           }
               };
-  send(MACHINE,data)
+  send(MACHINE,data);
 }
 
 function jail_showDeleteModal(name){
 
+    jail_deleteEpairWithJail(name);
     db_machine("delete", name);
     update();
 }
 
+function jail_deleteEpairWithJail(name){
+    var flag = true;
+
+    while(flag){
+        var epair = db_link("linkwithjail", name);
+
+        if(epair == null){
+            break;
+        }
+        diag_deleteLink(epair);
+    }
+
+    /*setTimeout(function(){
+	  update();
+  },500);*/
+}
 
 function jail_getList(){
   send(MACHINE,{mode:"jail", control:"select", id:"all"});

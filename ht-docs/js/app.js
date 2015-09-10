@@ -366,8 +366,8 @@ $(document).ready(function(){
   $("#l3Form").submit(function(){
 	var data = {"epair" : $("#l3Form .link").text(), "ipaddr" : $("#l3Form .ipaddr").val(), "ipmask" : $("#l3Form .ipmask").val(), "ip6addr" : $("#l3Form .ip6addr").val(), "ip6mask" : $("#l3Form .ip6mask").val(), "as" : $("#l3Form .as").val()};
 	$("#l3Modal").modal("hide");
-  	send(NETWORK, {mode: "l3", control: "create", msg : data});
-
+  //	send(NETWORK, {mode: "l3", control: "create", msg : data});
+    diag_setL3(data);
   });
 
   //deleteAllMachineボタン
