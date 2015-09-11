@@ -39,7 +39,7 @@ function db_machine(control,msg){
     }
   }
   else if (control == "insert"){
-    machineDB.push({name: msg.name, type: msg.type, template: "0", flavour: "0", comment: msg.comment, createTime: "0", modifyTime: "0", boot: "1"});
+    machineDB.push({name: msg.name, type: msg.type, template: "0", flavour: "0", comment: msg.comment, createTime: "0", modifyTime: "0", boot: "1", gw: ""});
   }
   else if (control == "boot"){
     machineDB[db_selectDB("machine",msg.name)].boot = msg.state;

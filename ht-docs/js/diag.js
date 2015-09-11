@@ -290,6 +290,7 @@ var l3str = '\
 				IP6Addr:<br>\
 				IP6Plefixlen:<br>\
 				ASNum:<br>\
+				デフォルトゲートウェイ:<br>\
 			</div>\
 			<form id="l3inputData" action="javascript:diag_l3DataConstract()">\
 				<input class="ipaddr1" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}">.\
@@ -303,6 +304,10 @@ var l3str = '\
 				<input class="ip6addr" type="text" style="width: 360px" pattern="[0-9A-Fa-f:]{1,128}"><br>\
 				<input class="ip6mask" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}"><br>\
 				<input class="as" type="text" style="width: 48px" maxlength=5 pattern="[0-9]{1,5}"><br>\
+				<input class="gw1" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}">.\
+				<input class="gw2" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}">.\
+				<input class="gw3" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}">.\
+				<input class="gw4" type="text" style="width: 36px" maxlength=3 pattern="[0-9]{1,3}"><br>\
 				<input class="epair" type="hidden">\
 				<input class="param" type="hidden">\
 				<input class="ipaddr1_b" type="hidden" value="" >\
@@ -316,6 +321,7 @@ var l3str = '\
 				<input class="ip6addr_b" type="hidden" value="" >\
 				<input class="ip6mask_b" type="hidden" value="" >\
 				<input class="as_b" type="hidden" value="" >\
+				<input class="machineName" type="hidden" value="">\
 				<br>\
 				<br>\
 				<button class="btn btn-default" id="machineInfo_submit" disabled>適用</button>\
@@ -357,7 +363,10 @@ function diag_showNetwork(epair){
 		return;
 	}
 	var db = l3DB[index];
-	console.log(db);
+
+	index = db_selectDB("machine", db.name);
+	var machine = machineDB[index];
+
 	var target = diag_selectTargetNode(epair);
 	var str = '<h4>相手側:' + target + '</h4>' + l3str;
 
@@ -393,9 +402,17 @@ function diag_showNetwork(epair){
 		$("#l3inputData .as").val(db.as);
 		$("#l3inputData .as_b").val(db.as);
 	}
+	if(machine.gw != ""){
+		gw = machine.gw.split(".");
+		$("#l3inputData .gw1").val(gw[0]);
+		$("#l3inputData .gw2").val(gw[1]);
+		$("#l3inputData .gw3").val(gw[2]);
+		$("#l3inputData .gw4").val(gw[3]);
+	}
+	$("#l3inputData .machineName").val(machine.name);
+
 
 	$("#machineInfo_submit").attr('onclick', 'javascript:$("#l3inputData").trigger("submit")');
-//	$("#machineInfo_submit").attr('onclick', 'javascript:alert()');
 	$("#machineInfo_submit").removeAttr("disabled");
 }
 
@@ -408,9 +425,25 @@ function diag_l3DataConstract(){
 	var ip6mask = $("#l3inputData .ip6mask").val();
 	var as = $("#l3inputData .as").val();
 	var epair = $("#l3inputData .epair").val();
+
+	if (ipaddr == "..."){
+		ipaddr = "";
+	}
+	if (ipmask == "..."){
+		ipmask = "";
+	}
 	var data = {epair : epair, ipaddr : ipaddr, ipmask : ipmask, ip6addr : ip6addr, ip6mask : ip6mask, as : as};
 
 	diag_setL3(data);
+
+	//Jailのデフォルトgateway設定
+	var machineName = $("#l3inputData .machineName").val();
+	var gw = $("#l3inputData .gw1").val() + "." + $("#l3inputData .gw2").val() + "." + $("#l3inputData .gw3").val() + "." + $("#l3inputData .gw4").val();
+
+	var index = db_selectDB("machine", machineName);
+	var machine = machineDB[index];
+	machine.gw = gw;
+
 }
 
 

@@ -75,6 +75,16 @@ function vexport(){
       l3lines +=  exporter.setL3(l3.name, l3.vepair, l3.ipaddr, l3.ipmask, l3.ip6addr, l3.ip6mask, l3.as);
     });
 	exporter.addLines(l3lines + "\n\n");
+
+/*
+	デフォルトゲートウェイの設定
+ */
+	var gwlines = "#set Gateway.\n";
+
+	machineDB.forEach(function(jail,index){
+      gwlines +=  exporter.setGw(jail.name, jail.gw);
+    });
+	exporter.addLines(gwlines + "\n\n");
 }
 
 var Exporter = function(){
@@ -169,4 +179,14 @@ Exporter.prototype.setL3 = function(name, epair, ipaddr, ipmask, ip6addr, ip6mas
 
 
 	return l3Str;
+}
+
+Exporter.prototype.setGw = function(name, gw){
+	var gwStr="";
+
+	if(gw != ""){
+		gwStr = op + ".assigngw('" + name + "','" + gw + "')\n";
+	}
+
+	return gwStr;
 }

@@ -460,7 +460,7 @@ $(document).ready(function(){
 	send(MACHINE,data);
   });
 
-  $('#exportModal, #newTemplateModal').on('shown.bs.modal', function() {
+  $('#exportModal').on('shown.bs.modal', function() {
     vexport();
   });
 
