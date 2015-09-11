@@ -1,36 +1,5 @@
 var epairNum = 999;
 
-function diag(data){
-	if(data.mode == "link"){
-	diag_link(data.msg);
-	}else if(data.mode == "l3"){
-	diag_l3(data.msg);
-	}
-}
-
-//サーバからグラフ情報を取得
-function diag_getDiag(){
-	send(NETWORK,{"mode":"list"})
-
-}
-
-//サーバから取得したepairの接続状態(L2)を代入
-function diag_link(data){
-//  if(data != "none"){ //noneだった場合は代入しない
-	linkDB = data;
-	console.log(linkDB);
-//  }
-}
-
-
-//サーバから取得したL3(ipアドレスなど)を代入し、diagをリロード
-//サーバはlink=>l3の順でデータを送るため、あとのl3でリロードを行う
-function diag_l3(data){
-//  if(data != "none"){ //noneだった場合は代入しない
-	l3DB = data;
-//  }
-	update();
-}
 
 //人間に見やすいsource/targetから、d3.js形式のsource/targetに変換
 //linkDB内のsource/targetのnameが、machineDBの要素の何番目に位置するか計算して、その要素の番号を代入、epairも入れ込む
@@ -52,44 +21,6 @@ function diag_createLink(){
 			d3linkDB.push({source : source, target : target, epair : lvalues.epair});
 		});
 	}
-}
-
-//選択したノードの詳細を表示
-function diag_displayInfo(name){
-	$("#jName").text("");
-	$("#jName").val("");
-	$("#jIP").empty();
-	$("#netInfo .shellBtn").val(name);
-	$("#jName").text(name);
-	$("#jName").val(name);
-
-	diag_selectNode(name).forEach(function(value,index){
-	$("#jIP").append("link: " + l3DB[value].epair + "(<=> " + diag_selectTargetNode(l3DB[value].epair) + "), IPAddr: " + l3DB[value].ipaddr + ", IPMask: " + l3DB[value].ipmask + "<br>");
-	});
-
-}
-
-function diag_displayLink(epair){
-	$("#sendNet .dLink").val(epair);
-
-	epaira = epair + "a";
-	epairb = epair + "b";
-	epairaName = "_host_";
-	epairbName = "_host_";
-
-
-	l3DB.forEach(function(values,index){
-	if(epaira == values.epair){
-		epairaName = values.name;
-	}
-	if(epairb == values.epair){
-		epairbName = values.name;
-	}
-	});
-
-	$("#dLinkA").text(epairaName);
-	$("#dLinkB").text(epairbName);
-
 }
 
 function diag_selectNode(name){
@@ -141,27 +72,10 @@ function diag_epairNumber(){
 }
 
 function diag_deleteLink(epair){
-//	send(NETWORK,{mode: "link",  control: "delete", msg : link});
 	db_l3("delete", epair+"a");
 	db_l3("delete", epair+"b");
 	db_link("delete", epair);
 	update();
-
-}
-
-function diag_getNetworkLog(networkLog){
-	if (networkLog.msgType == "success"){   //successメッセージが届いたら、
-	status({"mode":STATUS, "msg" : {"msg" : networkLog.msg}});
-	diag_getDiag();
-	//  reloadDB();
-	}
-}
-
-function diag_createL3(epair,ipaddr,ipmask,ip6addr,ip6mask,as){
-	//data = {"epair" : $("#createL3 .epair").val(), "ipaddr" : $("#createL3 .ipaddr").val(), "ipmask" : $("#createL3 .ipmask").val(), "ip6addr" : $("#createL3 .ip6addr").val(), "ip6mask" : $("#createL3 .ip6mask").val(), "as" : $("#createL3 .as").val()};
-	data = {"epair" : epair, "ipaddr" : ipaddr, "ipmask" : ipmask, "ip6addr" : ip6addr, "ip6mask" : ip6mask, "as" : as};
-	send(NETWORK, {mode: "l3", control: "create", msg : data});
-	//db_l3("insert", {epair:epairName+"a", type:"a", name: source, ipaddr: "", ipmask: "", ip6addr: "", ip6mask: ""});
 
 }
 
@@ -170,13 +84,7 @@ function diag_showNodeContextMenu(d){
 	$("#jName").val(d.name);
 
 	if(d.boot == "1"){
-		if(d.name != "masterRouter"){	//基本的にmasterRouterは停止させない
-			context_addList("停止", "jail_stop('" + d.name + "')");
-		}
 		context_addList("他のマシンに接続","diag_connectMode('" + d.name + "')");
-
-	}else{
-		context_addList("起動","jail_start('" + d.name + "')");
 	}
 	if(d.name != "masterRouter"){
 		context_divider();
@@ -189,15 +97,6 @@ function diag_showNodeContextMenu(d){
 	return false;
 }
 
-function diag_showPaneContextMenu(){
-
-	context_addList("サーバの作成", "jail_easyCreate(SERVER)");
-	context_show();
-/*	setTimeout(function(){		//タイミングの関係でcontextmenuが開いてすぐに閉じるのを防ぐ
-		openContext = true;
-	},200);*/
-	return false;
-}
 function diag_showLinkContextMenu(d){
 
 	context_addList("切断","diag_deleteLink('" + d.epair + "')");
@@ -209,30 +108,12 @@ function diag_showLinkContextMenu(d){
 }
 
 function diag_setL3(data){
-	//console.log("diag_setL3");
 	var idx = db_selectDB("l3", data.epair);
 	l3DB[idx].ipaddr = data.ipaddr;
 	l3DB[idx].ipmask = data.ipmask;
 	l3DB[idx].ip6addr = data.ip6addr;
 	l3DB[idx].ip6mask = data.ip6mask;
 	l3DB[idx].as = data.as;
-
-}
-
-function diag_nowloading(){
-	svg.append("rect")
-	.style("fill","white")
-	.style("opacity","0.7")
-	.attr("width",width)
-	.attr("height",height);
-
-	svg.append("image")
-	.attr("xlink:href", "./img/loading.gif")
-    .style("opacity","0.7")
-    .attr("x", width/2)
-	.attr("y", height/2)
-	.attr("width", width/5)
-	.attr("height", height/5);
 }
 
 function diag_showMachineInfoModal(name){
@@ -255,12 +136,10 @@ function diag_showMachineInfoModal(name){
 			machineType = "Server";
 			break;
 	}
-	var machineTemplate = template_list("all")[machine.template];
 
 	$("#machineInfoModal .modal-dialog .modal-content .modal-header .modal-title").text(machine.name);
 	$("#machineData_property .name .name").text(machine.name);
 	$("#machineData_property .machineType .machineType").text(machineType);
-	$("#machineData_property .template .template").text(machineTemplate);
 	$("#machineData_property .comment .comment").text(machine.comment);
 
 	$("#machineNetwork_list").empty();
@@ -417,8 +296,7 @@ function diag_showNetwork(epair){
 }
 
 function diag_l3DataConstract(){
-	console.log("l3DataConstract");
-//	$("#l3inputData").trigger('submit');
+
 	var ipaddr = $("#l3inputData .ipaddr1").val() + "." + $("#l3inputData .ipaddr2").val() + "." + $("#l3inputData .ipaddr3").val() + "." + $("#l3inputData .ipaddr4").val();
 	var ipmask = $("#l3inputData .ipmask1").val() + "." + $("#l3inputData .ipmask2").val() + "." + $("#l3inputData .ipmask3").val() + "." + $("#l3inputData .ipmask4").val();
 	var ip6addr = $("#l3inputData .ip6addr").val();
@@ -442,6 +320,10 @@ function diag_l3DataConstract(){
 
 	var index = db_selectDB("machine", machineName);
 	var machine = machineDB[index];
+
+	if (gw == "..."){
+		gw = "";
+	}
 	machine.gw = gw;
 
 }

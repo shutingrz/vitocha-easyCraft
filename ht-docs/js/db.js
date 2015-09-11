@@ -14,10 +14,6 @@ function db(mode,control,msg){
   if(mode == "machine"){
     db_machine(control,msg)
   }
-  else if(mode == "template"){
-    db_template(control,msg);
-  }
-
 }
 
 function db_machine(control,msg){
@@ -46,29 +42,6 @@ function db_machine(control,msg){
   }
 }
 
-function db_template(control,msg){
-  if (control == "delete"){
-    if (msg == "all"){
-      templateDB = [];
-    }else{
-      templateDB.splice(db_selectDB("template",msg),1);
-    }
-  }
-
-  else if (control == "select"){
-    if (msg == "all"){
-      return templateDB;
-    }
-    else{
-      return templateDB[db_selectDB("template",msg)];
-    }
-  }
-
-  else if (control == "insert"){
-    templateDB.push({name: msg.name, pkg: msg.pkg});
-  }
-
-}
 
 function db_link(control,msg){
 
@@ -126,12 +99,6 @@ function db_selectDB(control,name){
 
   if(control == "machine"){
     machineDB.forEach(function(values,index){
-      if(name == values.name){
-        idx = index;    //ここでreturnしても恐らくスコープの関係で値返せないので外の変数に渡す
-      }
-    });
-  }else if(control == "template"){
-    templateDB.forEach(function(values,index){
       if(name == values.name){
         idx = index;    //ここでreturnしても恐らくスコープの関係で値返せないので外の変数に渡す
       }

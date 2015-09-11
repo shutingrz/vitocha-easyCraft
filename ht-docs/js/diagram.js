@@ -81,7 +81,6 @@ function tick() {
 														return "translate(" + MRTWIDTH + "," + MRTHEIGHT + ")";
 													}else{
 														return "translate(" + d.x + "," + d.y + ")";
-											//			return "translate(" + node.centroid(d, i) + ")"
 													}
 												});
 }
@@ -140,10 +139,6 @@ function clickcircle(d){
 	}else if(d.boot == "1"){
 		diag_showMachineInfoModal(d.name);
 	}
-}
-
-function clicklink(d){
-	diag_displayLink(d.epair);
 }
 
 
@@ -237,7 +232,6 @@ function update() {
 	.append("line")
 	.on("mouseover",link_mouseover)
 	.on("mouseout",link_mouseout)
-	.on("click", function(d){ return clicklink(d);})
 	.on('contextmenu',function(d,i){
 		diag_showLinkContextMenu(d);
 	})
@@ -280,7 +274,6 @@ function update() {
 		})
 		.on("click", function(d) {
 				 return clickcircle(d);
-			//	return diag_showMachineInfoModal(d);
 		})
 		.on('contextmenu',function(d,i){
 			diag_showNodeContextMenu(d);
