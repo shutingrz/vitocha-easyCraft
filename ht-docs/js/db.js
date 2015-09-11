@@ -15,7 +15,7 @@ function db(mode,control,msg){
     db_machine(control,msg)
   }
   else if(mode == "template"){
-    db_template(control,msg)
+    db_template(control,msg);
   }
 
 }
@@ -95,7 +95,7 @@ function db_link(control,msg){
           return linkDB[idx].epair;
       }
   }else if (control == "insert"){
-    linkDB.push( {source: msg.source, target: msg.target, epair: msg.epair});
+    linkDB.push( {source: msg.source, target: msg.target, epair: msg.epair, vepair: ""});
   }
 }
 
@@ -117,7 +117,7 @@ function db_l3(control, msg){
     }else if (control == "insert"){
     //    var epairF = msg.epair.replace("epair","");
 //      l3DB.push( {source: msg.source, target: msg.target, epair: msg.epair});
-        l3DB.push( {epair:msg.epair, type:msg.type, name: msg.name, ipaddr: msg.ipaddr, ipmask: msg.ipmask, ip6addr: msg.ip6addr, ip6mask: msg.ip6mask})
+        l3DB.push( {epair:msg.epair, type:msg.type, name: msg.name, ipaddr: msg.ipaddr, ipmask: msg.ipmask, ip6addr: msg.ip6addr, ip6mask: msg.ip6mask, vepair:""});
     }
 }
 

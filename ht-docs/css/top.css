@@ -5,9 +5,9 @@ br {
 	height: 1.5em;
 }
 
-input { 
-     height: 1.5em; 
-     line-height: 1.5em; 
+input {
+     height: 1.5em;
+     line-height: 1.5em;
 }
 
 div.top{
@@ -86,6 +86,11 @@ div.top div.header div.right{
 	padding : 1%;
 }
 */
+
+#exportTextArea{
+	height: 70%;
+	width:100%;
+}
 #machineProperty .package{
 	width : 100%;
 }

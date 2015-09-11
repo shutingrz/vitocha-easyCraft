@@ -1,4 +1,4 @@
-var epairNum = 10;
+var epairNum = 999;
 
 function diag(data){
 	if(data.mode == "link"){

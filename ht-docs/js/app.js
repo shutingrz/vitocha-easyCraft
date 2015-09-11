@@ -19,7 +19,7 @@ var myDisconnect = false;
 var sendMsg = {
   msgType : "",
   data : ""
-}
+};
 //var machineDB = [{name:"_host_", type:"1", template:"0", flavour:"0",comment:"host Machine",boot:"1"}];
 var machineDB = [];
 var templateDB = [];
@@ -37,6 +37,7 @@ var serverHost = "0.0.0.0";	//接続中のホスト名
 var serverPortNum = "3000";	//接続中のホストのポート番号
 
 function init(){
+   $("#exportTextArea").val("");
    $("#powerSwitch").bootstrapSwitch('size', 'normal');
    $("#ciscoSwitch").bootstrapSwitch('size', 'normal');
 	if(($("#ciscoSwitch").bootstrapSwitch('state')) == true){  //ciscoライク表示スイッチがオンの場合
@@ -160,7 +161,7 @@ function getMachineLog(machineLog){
   if (machineLog.msgType == "success"){   //successメッセージが届いたら、
 	status({"mode":STATUS, "msg" : {"msg" : machineLog.msg}});
 	reloadDB();
-	if(($("#powerSwitch").bootstrapSwitch('disabled')) == true){
+	if(($("#powerSwitch").bootstrapSwitch('disabled')) === true){
 	  $("#powerSwitch").bootstrapSwitch('toggleDisabled');
 	  $('#machineList').removeAttr('disabled');
 	}
@@ -345,7 +346,7 @@ $(document).ready(function(){
 	$('[name="pkgCheckBox"]:checked').each(function(){
    //   console.log($(this).val())
 	  pkglist += $(this).val() + ";";
-	})
+  });
 	var data = { mode : "template",
 				 control : "create",
 				 msg : {
@@ -459,13 +460,9 @@ $(document).ready(function(){
 	send(MACHINE,data);
   });
 
-	//shellモーダルが開いたら
-  $("#shellModal").on("shown.bs.modal", function(){
-	$("#term").html("<span class=\"ff be\">Now loading...</span>");
-	jname = $("#jName").val()
-	console_register(jname);
+  $('#exportModal, #newTemplateModal').on('shown.bs.modal', function() {
+    vexport();
   });
-
 
   //モーダルが消えた場合のイベント
   $('#newPackageModal, #newTemplateModal').on('hidden.bs.modal', function () {      //newTemplateとnewPackageは構造が似ているので同じ関数に
@@ -502,13 +499,19 @@ $(document).ready(function(){
 	jname = "masterRouter";
   });
 
+  //exportモーダルが消えたら
+  $("#exportModal").on("hidden.bs.modal", function(){
+	$("#exportTextArea").val("");
+  });
+
+
 
 	//machineInfoモーダルが消えたら
   $("#machineInfoModal").on("hidden.bs.modal", function(){
   		if(consoleName != ""){
   	//		console_unregister(consoleName);
   			console_suspend();
-  			consoleName = ""
+  			consoleName = "";
   		}
   	});
 
@@ -520,7 +523,7 @@ $(document).ready(function(){
 		consoleName = $("#machineInfoModalTitle").text();
 		console_register(consoleName);
 	}
-	setTimeout(function(){$("#term").focus()},500);	//focus
+	setTimeout(function(){$("#term").focus();},500);	//focus
   });
 
 	//入力イベント
@@ -666,14 +669,14 @@ function context_hide(){
 
 function context_nest(caption, array){
 	var str="";
-	str +='<li class="dropdown-submenu">\n'
-	str +='	<a tabindex="-1" href="#">' + caption + '</a>\n'
-	str +='	<ul class="dropdown-menu">\n'
+	str +='<li class="dropdown-submenu">\n';
+	str +='	<a tabindex="-1" href="#">' + caption + '</a>\n';
+	str +='	<ul class="dropdown-menu">\n';
 	array.forEach(function(value,index){
 		str +='		<li><a tabindex="-1" href="javascript:' + value.func + ';context_hide();">' + value.caption + '</a></li>\n';
 	});
 	str +='	</ul>\n'
-	str +='</li>\n'
+	str +='</li>\n';
 	$("#contextMenu .dropdown-menu").append(str);
 }
 

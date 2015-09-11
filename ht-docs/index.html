@@ -19,6 +19,7 @@
 		<script src="./js/diagram.js"></script>
 		<script src="./js/console.js"></script>
 		<script src="./js/server.js"></script>
+		<script src="./js/exporter.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="./css/diagram.css" />
 		<link rel="stylesheet" type="text/css" href="./css/dropdown.css" />
@@ -62,6 +63,9 @@
 					<li ><a href="#" id="easyRouterBtn"><i class="fa fa-plus"></i>Router</a></li>
 					<li ><a href="#" id="easySwitchBtn"><i class="fa fa-plus"></i>Switch</a></li>
 					<hr>
+					<h3>vitocha</h3>
+					<li ><a href="#" data-toggle="modal" data-target="#exportModal"><i class="fa fa-plus"></i>エクスポート</a></li>
+					<hr>
 					<h3>表示設定</h3>
 					Ciscoモード<br>
 					<div class="make-switch ciscoSwitch">
@@ -85,6 +89,23 @@
 		</div>
 	</div>
 
+	<!-- エクスポートモーダル -->
+	<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModal" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h4 class="modal-title" id="exportModalTitle">エクスポート</h4>
+		  </div>
+		  <div class="modal-body">
+			  <textarea id="exportTextArea"></textarea>
+			  上の文章をコピーして/jail/bin/へ保存してください。
+		  </div>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 
 		<!-- 接続先のモーダル -->
 		<div class="modal fade" id="connectServerModal" tabindex="-1" role="dialog" aria-labelledby="connectServerModal" aria-hidden="true" data-backdrop="static">
@@ -222,7 +243,7 @@
 									<span class="comment align-right br"></span>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 
