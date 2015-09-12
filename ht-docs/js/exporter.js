@@ -85,6 +85,11 @@ function vexport(){
       gwlines +=  exporter.setGw(jail.name, jail.gw);
     });
 	exporter.addLines(gwlines + "\n\n");
+
+/*
+	フッター
+ */
+	exporter.addLines(exporter.footer);
 }
 
 var Exporter = function(){
@@ -97,6 +102,25 @@ var Exporter = function(){
 					+ "$jails='/jails'\n\n"
 					+ "#Operator is shutingrz!!\n"
 					+ op + "=Operator.new\n\n\n";
+
+	this.footer = ''
+				+ '# for DUMMYNET\n'
+				+ 'system("sysctl net.link.bridge.ipfw=1")\n\n'
+
+				+ '# make nwdiag\n'
+				+ 'puts "Now I\'m drawing network diagram!"\n'
+				+ 'f=open("#{$jails}/data/net.diag","w")\n'
+				+ '  f.puts ' + op + '.gendiag\n'
+				+ 'f.close\n\n'
+
+				+ '# make html\n'
+				+ 'f=open("#{$jails}/data/index.html","w")\n'
+				+ '  f.puts ' + op + '.genhtml\n'
+				+ 'f.close\n\n'
+
+				+ 'system("nwdiag -o #{$jails}/data/net.png #{$jails}/data/net.diag")\n\n'
+
+				+ 'puts "Finish!"';
 };
 
 Exporter.prototype.addLines = function(lines){
